@@ -1,4 +1,4 @@
-namespace CapaDatos.Models
+namespace Entidades;
 {
     public class Space
     {
