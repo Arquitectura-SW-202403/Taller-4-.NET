@@ -19,6 +19,6 @@ public class OccupancyStatus
     
     public string owner { get; set; }
 
-    // Relación con la tabla `SpaceXStatus`
-    public ICollection<SpaceXStatus> SpaceXStatus { get; } = new List<SpaceXStatus>();
+    public long? space_id {get; set;}
+    public Space? Space {get; set;}
 }

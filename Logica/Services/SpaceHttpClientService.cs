@@ -3,66 +3,74 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Entidades;
 
-namespace Logica.Services
-{
-    public class SpaceHttpClientService : IStartupConfigureServicesFilter{
+namespace Logica.Services{
+    public class HttpClientService{
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl = "https://localhost:7251"; 
-        public SpaceHttpClientService(HttpClient httpClient)
+        private readonly string _baseUrl;
+
+        public HttpClientService(HttpClient httpClient, string baseUrl)
         {
             _httpClient = httpClient;
+            _baseUrl = baseUrl;
         }
 
-        // Metodo de Traer todos los Espacios GetSpaces()
-        public async Task<List<Space>> GetSpacesAsync()
+        // Metodo Macro - (Con este vamos a manejar todas las request)
+        public async Task<T> SendRequestAsync<T>(HttpMethod method, string endpoint, object data = null)
         {
-            var response = await _httpClient.GetFromJsonAsync<List<Space>>($"{_baseUrl}/spaces");
-            if (response == null)
+            HttpRequestMessage requestMessage = new HttpRequestMessage(method, $"{_baseUrl}/{endpoint}");
+
+            if (data != null && (method == HttpMethod.Post || method == HttpMethod.Put))
             {
-                throw new Exception("No se pudieron obtener los espacios.");
+                requestMessage.Content = JsonContent.Create(data);
             }
 
-            return response;
-        }
+            HttpResponseMessage response = await _httpClient.SendAsync(requestMessage);
 
-
-        // Metodo Obtener Espacios Por Id
-        public async Task<Space> GetSpaceByIdAsync(int spaceId)
-        {
-            var response = await _httpClient.GetFromJsonAsync<Space>($"{_baseUrl}/spaces/{spaceId}");
-            if (response == null)
+            if (response.IsSuccessStatusCode)
             {
-                throw new Exception("No se encontró el espacio.");
+                if (method == HttpMethod.Delete)
+                {
+                    return default; // Para DELETE no hay respuesta, se devuelve Null
+                }
+                return await response.Content.ReadFromJsonAsync<T>();
             }
-
-            return response;
-        }
-
-         // Crear un nuevo espacio
-        public async Task<Space> CreateSpaceAsync(Space space)
-        {
-            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}/spaces", space);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<Space>();
-        }
-
-        // Obtener todas las reservas de un espacio
-        public async Task<List<Reservation>> GetReservationsForSpaceAsync(int spaceId)
-        {
-            var response = await _httpClient.GetFromJsonAsync<List<Reservation>>($"{_baseUrl}/spaces/{spaceId}/reservations");
-            if (response == null)
+            else
             {
-                throw new Exception("No se encontraron reservas para este espacio.");
+                throw new Exception($"Error en la operación HTTP: {response.ReasonPhrase}");
             }
-
-            return response;
         }
 
+        // Método para manejar solicitudes GETb(Listas solamenbte)
+        public async Task<List<T>> GetListAsync<T>(string endpoint)
+        {
+            return await SendRequestAsync<List<T>>(HttpMethod.Get, endpoint);
+        }
 
- 
+        // Método para manejar solicitudes GET para una sola entidad
+        public async Task<T> GetEntityAsync<T>(string endpoint, int id)
+        {
+            return await SendRequestAsync<T>(HttpMethod.Get, $"{endpoint}/{id}");
+        }
 
+        // Método para manejar solicitudes POST
+        public async Task<T> PostEntityAsync<T>(string endpoint, T entity)
+        {
+            return await SendRequestAsync<T>(HttpMethod.Post, endpoint, entity);
+        }
+
+        // Método para manejar solicitudes PUT
+        public async Task<T> PutEntityAsync<T>(string endpoint, int id, T entity)
+        {
+            return await SendRequestAsync<T>(HttpMethod.Put, $"{endpoint}/{id}", entity);
+        }
+
+        // Método  para manejar solicitudes DELETE
+        public async Task<bool> DeleteEntityAsync(string endpoint, int id)
+        {
+            await SendRequestAsync<object>(HttpMethod.Delete, $"{endpoint}/{id}");
+            return true; 
+        }
 
 
     }

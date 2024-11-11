@@ -24,5 +24,5 @@ public class Space
     public Zone? Zone {get; set;} = null!;
 
     // Relación con la tabla `SpaceXStatus`
-    public ICollection<SpaceXStatus> SpaceXStatus { get;} = new List<SpaceXStatus>();
+    public ICollection<OccupancyStatus> Occupancies { get;} = new List<OccupancyStatus>();
 }
