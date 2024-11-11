@@ -1,19 +1,28 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Entidades;
+public class Space
 {
-    public class Space
-    {
-        public long Id { get; set; }
-        
-        // Propiedades de la tabla `spaces`
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
-        public float Capacidad { get; set; }
+    public long id { get; set; }
+    
+    // Propiedades de la tabla `spaces`
+    
+    public string name { get; set; }
 
-        // Clave foránea: Relación con la tabla `zones`
-        public int ZoneId { get; set; }
-        public Zone Zone { get; set; } // Relación con `Zone`
+    
+    public string description { get; set; }
 
-        // Relación con la tabla `SpaceXStatus`
-        public List<SpaceXStatus> SpaceXStatus { get; set; }
-    }
+    
+    public float capacity { get; set; }
+
+    // Clave foránea: Relación con la tabla `zones`
+
+   
+    public int? zone_id { get; set; }
+
+    public Zone? Zone {get; set;} = null!;
+
+    // Relación con la tabla `SpaceXStatus`
+    public ICollection<SpaceXStatus> SpaceXStatus { get;} = new List<SpaceXStatus>();
 }

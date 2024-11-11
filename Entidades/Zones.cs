@@ -1,11 +1,14 @@
-namespace CapaDatos.Models
-{
-    public class Zone
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-        // Relación con la tabla `Space`
-        public List<Space> Espacios { get; set; }
-    }
+namespace Entidades;
+
+public class Zone
+{
+    public int id { get; set; }
+
+    public string name { get; set; }
+
+    // Relación con la tabla `Space`
+    public ICollection<Space> Espacios { get; } = new List<Space>();
 }

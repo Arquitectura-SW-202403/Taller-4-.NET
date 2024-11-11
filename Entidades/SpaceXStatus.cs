@@ -1,14 +1,19 @@
-namespace CapaDatos.Models
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
+using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore;
+
+namespace Entidades;
+
+
+[PrimaryKey(nameof(space_id), nameof(occupancy_status_id))]
+public class SpaceXStatus
 {
-    public class SpaceXStatus
-    {
-        public long Id { get; set; }
+    // Claves foráneas
+    public long space_id { get; set; }
+    public long occupancy_status_id { get; set; }
 
-        // Claves foráneas
-        public long SpaceId { get; set; }
-        public Space Space { get; set; }  // Relación con `Space`
-
-        public long OccupancyStatusId { get; set; }
-        public OccupancyStatus OccupancyStatus { get; set; }  // Relación con `OccupancyStatus`
-    }
+    public Space? Space {get; set; }
+    public OccupancyStatus? OccupancyStatus {get; set;}
 }
