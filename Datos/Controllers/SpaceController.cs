@@ -38,7 +38,6 @@ namespace Datos.Controllers
             {
                 return BadRequest();
             }
-
             return space;
         }
 

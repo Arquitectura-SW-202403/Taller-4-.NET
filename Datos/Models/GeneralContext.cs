@@ -13,8 +13,8 @@ public class GeneralContext : DbContext
 
     public DbSet<Space> spaces {get; set;} = null!;
     public DbSet<Zone> zones {get; set;} = null!;
-    public DbSet<OccupancyStatus> occupancyStatus {get; set;} = null!;
-    public DbSet<SpaceXStatus> spaceXStatus {get; set;} = null!;
+    public DbSet<OccupancyStatus> occupancy_status {get; set;} = null!;
+    public DbSet<SpaceXStatus> space_x_status {get; set;} = null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

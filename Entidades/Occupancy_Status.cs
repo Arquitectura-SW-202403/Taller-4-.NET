@@ -7,7 +7,7 @@ namespace Entidades;
 public class OccupancyStatus
 {
     
-    public long Id { get; set; }
+    public long id { get; set; }
 
     // Propiedades de la tabla `occupancy_status`
     

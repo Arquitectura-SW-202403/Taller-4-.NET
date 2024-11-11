@@ -25,18 +25,18 @@ namespace Datos.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SpaceXStatus>>> GetspaceXStatus()
         {
-            return await _context.spaceXStatus.ToListAsync();
+            return await _context.space_x_status.Include(x => x.Space).Include(x  => x.OccupancyStatus).ToListAsync();
         }
 
         // GET: api/SpaceXStatus/5/4
         [HttpGet("{idf}/{ids}")]
         public async Task<ActionResult<SpaceXStatus>> GetSpaceXStatus(long idf, long ids)
         {
-            var spaceXStatus = await _context.spaceXStatus.FindAsync(idf, ids);
+            var spaceXStatus = await _context.space_x_status.FindAsync(idf, ids);
 
             if (spaceXStatus == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             return spaceXStatus;
@@ -48,7 +48,7 @@ namespace Datos.Controllers
         [HttpPost]
         public async Task<ActionResult<SpaceXStatus>> PostSpaceXStatus(SpaceXStatus spaceXStatus)
         {
-            _context.spaceXStatus.Add(spaceXStatus);
+            _context.space_x_status.Add(spaceXStatus);
             try
             {
                 await _context.SaveChangesAsync();
@@ -72,13 +72,13 @@ namespace Datos.Controllers
         [HttpDelete("{idf}/{ids}")]
         public async Task<IActionResult> DeleteSpaceXStatus(long idf, long ids)
         {
-            var spaceXStatus = await _context.spaceXStatus.FindAsync(idf, ids);
+            var spaceXStatus = await _context.space_x_status.FindAsync(idf, ids);
             if (spaceXStatus == null)
             {
                 return NotFound();
             }
 
-            _context.spaceXStatus.Remove(spaceXStatus);
+            _context.space_x_status.Remove(spaceXStatus);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -86,7 +86,7 @@ namespace Datos.Controllers
 
         private bool SpaceXStatusExists(long id)
         {
-            return _context.spaceXStatus.Any(e => e.space_id == id);
+            return _context.space_x_status.Any(e => e.space_id == id);
         }
     }
 }

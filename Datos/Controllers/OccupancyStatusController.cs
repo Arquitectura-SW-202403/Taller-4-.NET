@@ -25,14 +25,14 @@ namespace Datos.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OccupancyStatus>>> GetoccupancyStatus()
         {
-            return await _context.occupancyStatus.ToListAsync();
+            return await _context.occupancy_status.ToListAsync();
         }
 
         // GET: api/OccupancyStatus/5
         [HttpGet("{id}")]
         public async Task<ActionResult<OccupancyStatus>> GetOccupancyStatus(long id)
         {
-            var occupancyStatus = await _context.occupancyStatus.FindAsync(id);
+            var occupancyStatus = await _context.occupancy_status.FindAsync(id);
 
             if (occupancyStatus == null)
             {
@@ -47,7 +47,7 @@ namespace Datos.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOccupancyStatus(long id, OccupancyStatus occupancyStatus)
         {
-            if (id != occupancyStatus.Id)
+            if (id != occupancyStatus.id)
             {
                 return BadRequest();
             }
@@ -78,23 +78,23 @@ namespace Datos.Controllers
         [HttpPost]
         public async Task<ActionResult<OccupancyStatus>> PostOccupancyStatus(OccupancyStatus occupancyStatus)
         {
-            _context.occupancyStatus.Add(occupancyStatus);
+            _context.occupancy_status.Add(occupancyStatus);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOccupancyStatus", new { id = occupancyStatus.Id }, occupancyStatus);
+            return CreatedAtAction("GetOccupancyStatus", new { id = occupancyStatus.id }, occupancyStatus);
         }
 
         // DELETE: api/OccupancyStatus/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOccupancyStatus(long id)
         {
-            var occupancyStatus = await _context.occupancyStatus.FindAsync(id);
+            var occupancyStatus = await _context.occupancy_status.FindAsync(id);
             if (occupancyStatus == null)
             {
                 return NotFound();
             }
 
-            _context.occupancyStatus.Remove(occupancyStatus);
+            _context.occupancy_status.Remove(occupancyStatus);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +102,7 @@ namespace Datos.Controllers
 
         private bool OccupancyStatusExists(long id)
         {
-            return _context.occupancyStatus.Any(e => e.Id == id);
+            return _context.occupancy_status.Any(e => e.id == id);
         }
     }
 }

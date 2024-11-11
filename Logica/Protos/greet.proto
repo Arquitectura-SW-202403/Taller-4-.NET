@@ -2,20 +2,53 @@ syntax = "proto3";
 
 option csharp_namespace = "Logica";
 
-package greet;
+package espacio;
 
-// The greeting service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
+service SpaceService {
+    // Obtener todos los espacios
+    rpc GetSpaces (Empty) returns (SpaceList);
+
+    // Obtener un espacio por ID
+    rpc GetSpace (SpaceId) returns (Space);
+
+    // Crear un nuevo espacio
+    rpc CreateSpace (Space) returns (Space);
+
+    // Actualizar un espacio existente
+    rpc UpdateSpace (Space) returns (Space);
+
+    // Eliminar un espacio
+    rpc DeleteSpace (SpaceId) returns (Empty);
+
+    // Reservar un espacio
+    rpc ReserveSpace (ReservationRequest) returns (Reservation);
+
+    // Cambiar una reserva
+    rpc ChangeReservation (ChangeReservationRequest) returns (Reservation);
+
+    // Cancelar una reserva
+    rpc CancelReservation (ReservationId) returns (Empty);
+
+    // Obtener las reservas de un espacio
+    rpc GetReservationsForSpace (SpaceId) returns (ReservationList);
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+// Mensajes
+message Space {
+    int32 id = 1;
+    string name = 2;
+    string location = 3;
+    bool available = 4;
 }
 
-// The response message containing the greetings.
-message HelloReply {
-  string message = 1;
+message SpaceId {
+    int32 id = 1;
 }
+
+message SpaceList {
+    repeated Space spaces = 1;
+}
+
+message Empty {}
+
+
