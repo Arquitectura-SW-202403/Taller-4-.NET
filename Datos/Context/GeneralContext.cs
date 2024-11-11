@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Entidades;
-namespace Datos.Models;
+namespace Datos.Context;
 
 public class GeneralContext : DbContext
 {

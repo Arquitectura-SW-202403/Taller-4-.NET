@@ -37,8 +37,7 @@ service SpaceService {
 message Space {
     int32 id = 1;
     string name = 2;
-    string location = 3;
-    bool available = 4;
+    
 }
 
 message SpaceId {

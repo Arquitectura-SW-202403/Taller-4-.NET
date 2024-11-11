@@ -24,23 +24,20 @@ namespace Logica.Services
 
     public async Task<Space> CreateSpaceAsync(Space space)
     {
-        return await _httpClientService.PostEntityAsync("spaces", space);
+        return await _httpClientService.PostEntityAsync("spaces",space);
     }
 
-    public async Task<Space> UpdateSpaceAsync(int spaceId, Space space)
-    {
-        return await _httpClientService.PutEntityAsync("spaces", spaceId, space);
-    }
+    //public async Task<Space> UpdateSpaceAsync(int spaceId, Space space)
+    //{
+    //    return await _httpClientService.PutEntityAsync("spaces", spaceId, space);
+    //}
+    //
 
     public async Task<bool> DeleteSpaceAsync(int spaceId)
     {
         return await _httpClientService.DeleteEntityAsync("spaces", spaceId);
     }
 
-    public async Task<List<Reservation>> GetReservationsForSpaceAsync(int spaceId)
-    {
-        return await _httpClientService.GetListAsync<Reservation>($"spaces/{spaceId}/reservations");
-    }
 }
 
 }

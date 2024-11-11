@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Datos.Models;
+using Datos.Context;
 using Entidades;
 
 namespace Datos.Controllers

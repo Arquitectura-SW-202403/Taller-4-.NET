@@ -1,33 +1,28 @@
-namespace Logica.Services
-{
-    public class SpaceReservationService
+public class ReservationService
 {
     private readonly HttpClientService _httpClientService;
 
-    public SpaceReservationService(HttpClientService httpClientService)
+    public ReservationService(HttpClientService httpClientService)
     {
         _httpClientService = httpClientService;
     }
 
-    // Crear una nueva reserva
-    public async Task<Reservation> CreateReservationAsync(int spaceId, string customerName, DateTime reservationTime)
+    public async Task<bool> CreateReservationAsync(int spaceId, string customerName, DateTime reservationTime)
     {
         var reservationRequest = new
         {
-            SpaceId = spaceId,
-            CustomerName = owner,
+            spaceId=spaceId,
+            Owner = customerName, 
             ReservationTime = reservationTime
         };
 
-        // Aquí, `PostEntityAsync` maneja la solicitud HTTP y te devuelve el resultado.
-        return await _httpClientService.PostEntityAsync<Reservation>("reservations", reservationRequest);
+        // Se realiza una solicitud POST para crear la reserva sobre el espacio
+        return await _httpClientService.PutEntityAsync<bool>($"spaces/{spaceId}/occupancy_status", reservationRequest);
     }
 
-    // Cancelar una reserva
-    public async Task<bool> CancelReservationAsync(int reservationId)
+    public async Task<bool> CancelReservationAsync(int spaceId, int reservationId)
     {
-        return await _httpClientService.DeleteEntityAsync("reservations", reservationId);
+        // Aquí se hace una solicitud DELETE para cancelar la reserva de un espacio específico
+        return await _httpClientService.DeleteEntityAsync($"spaces/{spaceId}/occupancy_status", reservationId);
     }
-}
-
 }

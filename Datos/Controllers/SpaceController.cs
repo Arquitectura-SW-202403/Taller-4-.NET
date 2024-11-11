@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Datos.Models;
+using Datos.Context;
 using Entidades;
 
 namespace Datos.Controllers
@@ -25,7 +25,7 @@ namespace Datos.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Space>>> Getspaces()
         {
-            return await _context.spaces.Include(x => x.Zone).ToListAsync();
+            return await _context.spaces.Include(x => x.Zone).Include(x => x.Occupancies).ToListAsync();
         }
 
         // GET: api/Space/5
@@ -78,6 +78,20 @@ namespace Datos.Controllers
         public async Task<ActionResult<Space>> PostSpace(Space space)
         {
             _context.spaces.Add(space);
+            await _context.SaveChangesAsync();
+
+            for (int i = 6; i <= 18; i+=2) {
+                _context.occupancy_status.Add(
+                    new OccupancyStatus {
+                        owner = "",
+                        space_id = space.id,
+                        start_time = i,
+                        end_time = i+2,
+                        status = "available"
+                    }
+                );
+            }
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSpace", new { id = space.id }, space);
