@@ -47,7 +47,7 @@ namespace MyApp.Namespace
             try
             {
                 // Llamar al método DeleteSpace del broker de gRPC
-                await _broker.DeleteSpace(new Proto.SpaceId { Id = (int)id });
+                await _broker.DeleteSpace(new SpaceId { Id = (int)id });
 
                 _logger.LogInformation("Espacio eliminado con éxito.");
                 return RedirectToPage(); // Redirigir a la misma página para refrescar la lista

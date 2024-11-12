@@ -74,13 +74,25 @@ public class SpaceServiceImpl : SpaceService.SpaceServiceBase
         return (OccupancyList) JsonParser.Default.Parse(f.ToString(), OccupancyList.Descriptor);
     }
 
-    public override Task<Empty> BlockRange(OccupancyRange request, ServerCallContext context)
+    public override async Task<Empty> BlockRange(OccupancyRange request, ServerCallContext context)
     {
-        return base.BlockRange(request, context);
+        var obj = new {
+            owner = request.Owner,
+            start = request.Start,
+            end = request.End
+        };
+        await _httpClient.PostEntityAsync<object>($"api/OccupancyStatus/block/{request.SpaceId}", obj);
+        return new Empty{};
     }
 
-    public override Task<Empty> FreeRange(OccupancyRange request, ServerCallContext context)
+    public override async Task<Empty> FreeRange(OccupancyRange request, ServerCallContext context)
     {
-        return base.FreeRange(request, context);
+        var obj = new {
+            owner = request.Owner,
+            start = request.Start,
+            end = request.End
+        };
+        await _httpClient.PostEntityAsync<object>($"api/OccupancyStatus/free/{request.SpaceId}", obj);
+        return new Empty{};
     }
 }
