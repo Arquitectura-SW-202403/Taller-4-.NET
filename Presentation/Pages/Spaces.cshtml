@@ -1,0 +1,49 @@
+﻿@page
+@model MyApp.Namespace.SpacesModel
+@{
+    ViewData["Title"] = "Lista de Espacios";
+}
+
+<h1>Lista de Espacios</h1>
+
+<!-- Mostrar lista de espacios -->
+@if (Model.Spaces?.Spaces.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre del Espacio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var space in Model.Spaces.Spaces)
+            {
+                <tr>
+                    <td>@space.Name</td>
+                    <td>
+                        <!-- Formulario para eliminar espacio -->
+                        <form method="post" asp-page-handler="DeleteSpace" onsubmit="return confirm('¿Estás seguro de eliminar este espacio?');">
+                            <input type="hidden" name="id" value="@space.Id" />
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se han encontrado espacios.</p>
+}
+
+<!-- Formulario para crear espacio -->
+<h2>Crear Nuevo Espacio</h2>
+<form method="post" asp-page-handler="CreateSpace">
+    <div class="form-group">
+        <label for="spaceName">Nombre del Espacio</label>
+        <input type="text" id="spaceName" name="spaceName" class="form-control" placeholder="Ingresa el nombre del espacio" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Crear Espacio</button>
+</form>
