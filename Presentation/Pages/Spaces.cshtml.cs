@@ -32,10 +32,21 @@ namespace MyApp.Namespace
         // Método que carga la lista de espacios 
         public async Task OnGetAsync()
         {
+            occupancyList = new List<Occupance>();
             try
             {
                 Spaces = await _broker.GetSpaceList(); // Obtener la lista de espacios
-                occupancyList = await _broker.OccupancyList();
+                foreach (var sp in Spaces.Results)
+                {
+                    var oc = await _broker.GetOccupancyList(
+                        new OccupancyQuery {
+                            SpaceId=sp.Id,
+                            Start=6,
+                            End=8
+                        }
+                    );
+                    occupancyList.Add(oc.Result.First());
+                }
             }
             catch (Exception ex)
             {
