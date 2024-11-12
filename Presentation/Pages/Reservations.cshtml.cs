@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Collections.Generic;
 
 namespace MyApp.Namespace
@@ -33,27 +34,20 @@ namespace MyApp.Namespace
             };
         }
 
-        // Método para obtener las franjas horarias en función del espacio seleccionado (solicitud AJAX)
-        public IActionResult OnGetGetTimeSlots(int spaceId)
+        // Método OnPost que se llama cuando el formulario se envía
+        public IActionResult OnPost()
         {
-            List<string> timeSlots = new List<string>();
-
-            // Lógica para devolver las franjas horarias según el espacio seleccionado
-            if (spaceId == 1) // Cancha de Fútbol
+            if (!ModelState.IsValid)
             {
-                timeSlots = new List<string> { "8:00 AM - 10:00 AM", "10:00 AM - 12:00 PM", "12:00 PM - 2:00 PM" };
-            }
-            else if (spaceId == 2) // Cancha de Tenis
-            {
-                timeSlots = new List<string> { "9:00 AM - 11:00 AM", "11:00 AM - 1:00 PM", "1:00 PM - 3:00 PM" };
-            }
-            else if (spaceId == 3) // Cancha de Baloncesto
-            {
-                timeSlots = new List<string> { "8:00 AM - 10:00 AM", "10:00 AM - 12:00 PM", "12:00 PM - 2:00 PM" };
+                // Si hay errores de validación, se vuelve a mostrar la página con los datos ingresados
+                return Page();
             }
 
-            // Retornar las franjas horarias como JSON
-            return new JsonResult(timeSlots);
+            // Aquí procesarías la reserva (guardarla en base de datos, enviar confirmación, etc.)
+            // Puedes usar los valores de SelectedSpaceId, SelectedTimeSlot, CustomerName, ReservationDate
+
+            // Redirigir a una página de confirmación o mostrar mensaje
+            return RedirectToPage("Confirmation", new { name = CustomerName, spaceId = SelectedSpaceId });
         }
     }
 

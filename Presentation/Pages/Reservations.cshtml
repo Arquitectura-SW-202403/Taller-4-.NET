@@ -78,7 +78,6 @@
         color: #6c757d;
     }
 
-    
 </style>
 
 <div class="container">
@@ -93,36 +92,27 @@
         <div class="card-body">
             <form method="post">
                 
-                <!-- Selección del Espacio Deportivo -->
-                <div class="mb-3">
-                    <label for="space" class="form-label">Espacio Deportivo</label>
-                    <select class="form-select" id="space" name="SelectedSpaceId" onchange="loadTimeSlots()" required>
-                        <option value="">Selecciona un espacio</option>
-                        @foreach (var space in Model.Spaces)
-                        {
-                            <option value="@space.Id">@space.Name</option>
-                        }
-                    </select>
-                </div>
+                
 
                 <!-- Selección de la Franja Horaria -->
                 <div class="mb-3">
                     <label for="timeSlot" class="form-label">Franja Horaria</label>
                     <select class="form-select" id="timeSlot" name="SelectedTimeSlot" required>
                         <option value="">Selecciona una franja horaria</option>
+                
                     </select>
                 </div>
 
                 <!-- Nombre del Cliente -->
                 <div class="mb-3">
                     <label for="customerName" class="form-label">Nombre del Cliente</label>
-                    <input type="text" class="form-control" id="customerName" name="CustomerName" placeholder="Ingresa tu nombre" required>
+                    <input type="text" class="form-control" id="customerName" name="CustomerName" placeholder="Ingresa tu nombre" value="@Model.CustomerName" required>
                 </div>
 
                 <!-- Selección de la Fecha -->
                 <div class="mb-3">
                     <label for="date" class="form-label">Fecha de la Reserva</label>
-                    <input type="date" class="form-control" id="date" name="ReservationDate" required>
+                    <input type="date" class="form-control" id="date" name="ReservationDate" value="@Model.ReservationDate.ToString("yyyy-MM-dd")" required>
                 </div>
 
                 <!-- Botón para Confirmar Reserva -->
@@ -138,35 +128,3 @@
         <small>Recibirás una confirmación por correo electrónico con los detalles de tu reserva.</small>
     </div>
 </div>
-
-<!-- Script para carga de franjas horarias -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    function loadTimeSlots() {
-        var spaceId = $('#space').val();
-        if (spaceId) {
-            // Realizar una solicitud AJAX para obtener las franjas horarias
-            $.ajax({
-                url: '@Url.Page("GetTimeSlots")', // Ruta al método en el servidor que devuelve las franjas horarias
-                type: 'GET',
-                data: { spaceId: spaceId },
-                success: function(response) {
-                    // Limpiar las opciones actuales
-                    $('#timeSlot').empty();
-                    $('#timeSlot').append('<option value="">Selecciona una franja horaria</option>');
-                    // Agregar las nuevas franjas horarias
-                    $.each(response, function(index, timeSlot) {
-                        $('#timeSlot').append('<option value="' + timeSlot + '">' + timeSlot + '</option>');
-                    });
-                },
-                error: function() {
-                    alert("Error al cargar las franjas horarias.");
-                }
-            });
-        } else {
-            // Si no se selecciona un espacio, limpiar las franjas horarias
-            $('#timeSlot').empty();
-            $('#timeSlot').append('<option value="">Selecciona una franja horaria</option>');
-        }
-    }
-</script>
