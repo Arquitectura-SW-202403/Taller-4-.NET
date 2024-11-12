@@ -27,24 +27,21 @@
             </thead>
             <tbody>
                 @foreach (var space in Model.Spaces.Results)
-                
-                {
-                    var occupancyStatus = Model.occupancyList.FirstOrDefault(o => o.SpaceId == space.Id)?.Status ?? "Desconocido";
-                    <tr>
-                        <td>@space.Name</td>
-                        <td>@space.Capacity</td>  
-                        <td>@space.ZoneId</td> 
-                        <td>@occupancyStatus</td>
-                             
-                        <td>
-                            <!-- Formulario para eliminar espacio -->
-                            <form method="post" asp-page-handler="DeleteSpace" onsubmit="return confirm('¿Estás seguro de eliminar este espacio?');">
-                                <input type="hidden" name="id" value="@space.Id" />
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
+                    {
+                        var occupancyStatus = Model.occupancyList?.FirstOrDefault(o => o.SpaceId == space.Id)?.Status ?? "Desconocido";
+                        <tr>
+                            <td>@space.Name</td>
+                            <td>@space.Capacity</td>  
+                            <td>@space.ZoneId</td> 
+                            <td>@occupancyStatus</td>
+                            <td>
+                                <form method="post" asp-page-handler="DeleteSpace" onsubmit="return confirm('¿Estás seguro de eliminar este espacio?');">
+                                    <input type="hidden" name="id" value="@space.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
             </tbody>
         </table>
     }
