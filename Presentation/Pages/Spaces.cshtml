@@ -4,46 +4,121 @@
     ViewData["Title"] = "Lista de Espacios";
 }
 
-<h1>Lista de Espacios</h1>
+<!-- Contenedor principal -->
+<div class="container mt-5">
 
-<!-- Mostrar lista de espacios -->
-@if (Model.Spaces?.Results.Count > 0)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre del Espacio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var space in Model.Spaces.Results)
-            {
-                <tr>
-                    <td>@space.Name</td>
-                    <td>
-                        <!-- Formulario para eliminar espacio -->
-                        <form method="post" asp-page-handler="DeleteSpace" onsubmit="return confirm('¿Estás seguro de eliminar este espacio?');">
-                            <input type="hidden" name="id" value="@space.Id" />
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No se han encontrado espacios.</p>
-}
-
-<!-- Formulario para crear espacio -->
-<h2>Crear Nuevo Espacio</h2>
-<form method="post" asp-page-handler="CreateSpace">
-    <div class="form-group">
-        <label for="spaceName">Nombre del Espacio</label>
-        <input type="text" id="spaceName" name="spaceName" class="form-control" placeholder="Ingresa el nombre del espacio" required />
+    <!-- Título -->
+    <div class="text-center mb-4">
+        <h1 class="display-4">Lista de Espacios</h1>
     </div>
-    <button type="submit" class="btn btn-primary">Crear Espacio</button>
-</form>
+
+    <!-- Mostrar lista de espacios -->
+    @if (Model.Spaces?.Results.Count > 0)
+    {
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre del Espacio</th>
+                    <th>Capacidad</th>
+                    <th>Zona</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var space in Model.Spaces.Results)
+                {
+                    <tr>
+                        <td>@space.Name</td>
+                        <td>@space.Capacity</td>  <!-- Campo de capacidad -->
+                        <td>@space.Zone</td>      <!-- Campo de zona -->
+                        <td>
+                            <!-- Formulario para eliminar espacio -->
+                            <form method="post" asp-page-handler="DeleteSpace" onsubmit="return confirm('¿Estás seguro de eliminar este espacio?');">
+                                <input type="hidden" name="id" value="@space.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <p>No se han encontrado espacios.</p>
+        </div>
+    }
+
+    <!-- Formulario para crear espacio -->
+    <div class="card mt-5">
+        <div class="card-header">
+            <h2 class="card-title text-center">Crear Nuevo Espacio</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-page-handler="CreateSpace">
+                <div class="form-group">
+                    <label for="spaceName">Nombre del Espacio</label>
+                    <input type="text" id="spaceName" name="spaceName" class="form-control" placeholder="Ingresa el nombre del espacio" required />
+                </div>
+                <div class="form-group">
+                    <label for="capacity">Capacidad</label>
+                    <input type="number" id="capacity" name="capacity" class="form-control" placeholder="Ingresa la capacidad del espacio" required />
+                </div>
+                <div class="form-group">
+                    <label for="zone">Zona</label>
+                    <input type="text" id="zone" name="zone" class="form-control" placeholder="Ingresa la zona a la que pertenece" required />
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Crear Espacio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- Estilos adicionales -->
+<style>
+    /* Estilo personalizado para que la tabla y formularios se vean más modernos */
+    .table {
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+    
+    .thead-dark {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .container {
+        max-width: 800px;
+    }
+
+    .alert-info {
+        font-size: 1.2rem;
+    }
+
+    .card {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background-color: #fd7e14;
+        border-color: #fd7e14;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem;
+    }
+
+    h1, h2 {
+        font-family: 'Arial', sans-serif;
+        color: #343a40;
+    }
+</style>
