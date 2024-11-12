@@ -21,6 +21,7 @@ namespace MyApp.Namespace
 
         
         public SpaceList Spaces { get; set; }
+        
 
         // Método que carga la lista de espacios 
         public async Task OnGetAsync()
@@ -60,7 +61,7 @@ namespace MyApp.Namespace
         }
 
         // Método para crear un nuevo espacio
-        public async Task<IActionResult> OnPostCreateSpaceAsync(string spaceName)
+        public async Task<IActionResult> OnPostCreateSpaceAsync(string spaceName, int capacity, string zone, string description)
         {
             if (string.IsNullOrWhiteSpace(spaceName))
             {
@@ -70,18 +71,19 @@ namespace MyApp.Namespace
 
             try
             {
-                var newSpace = new FormSpace { Name = spaceName };
+                Console.WriteLine((zone == null) + " " + spaceName);
+                var newSpace = new FormSpace { Name = spaceName, Capacity= capacity, ZoneId= Int32.Parse(zone), Description=description  };
 
                 // Llamar al método CreateSpace del broker de gRPC
                 await _broker.CreateSpace(newSpace);
 
                 _logger.LogInformation("Espacio creado con éxito.");
-                return RedirectToPage(); // Redirigir a la misma página para refrescar la lista de espacios
+                return RedirectToPage("/Index"); // Redirigir a la misma página para refrescar la lista de espacios
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear el espacio.");
-                return Page(); // Regresar a la página actual en caso de error
+                return RedirectToPage(); // Regresar a la página actual en caso de error
             }
         }
     }

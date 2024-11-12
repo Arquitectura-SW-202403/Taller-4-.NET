@@ -95,4 +95,10 @@ public class SpaceServiceImpl : SpaceService.SpaceServiceBase
         await _httpClient.PostEntityAsync<object>($"api/OccupancyStatus/free/{request.SpaceId}", obj);
         return new Empty{};
     }
+
+    public override async Task<ZonesList> GetZones(Empty request, ServerCallContext context)
+    {
+        var f = (JsonElement) await _httpClient.GetListAsync<object>($"api/zones");
+        return (ZonesList) JsonParser.Default.Parse(f.ToString(), ZonesList.Descriptor);
+    }
 }

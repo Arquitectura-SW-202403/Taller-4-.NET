@@ -25,6 +25,7 @@
         color: white;
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
 
     .display-4 {
@@ -37,7 +38,7 @@
         font-weight: 300;
     }
 
-    /* Tarjeta de Reservas */
+    /* Tarjetas de sección */
     .card {
         border: none;
         border-radius: 12px;
@@ -45,6 +46,7 @@
         background-color: #ffffff;
         margin-top: 30px;
         padding: 20px;
+        text-align: center;
     }
 
     .card-header {
@@ -53,7 +55,6 @@
         font-size: 1.75rem;
         padding: 15px;
         border-radius: 10px;
-        text-align: center;
     }
 
     .card-body {
@@ -66,7 +67,7 @@
         margin-bottom: 20px;
     }
 
-    /* Botón de Ir a Reservas */
+    /* Botón de acción */
     .btn-primary {
         background-color: #28a745;
         border-color: #28a745;
@@ -90,63 +91,73 @@
         margin-top: 20px;
     }
 
-    /* Estilos adicionales */
-    .container .lead {
-        font-size: 1.25rem;
-        text-align: center;
-    }
-
     /* Animación de entrada */
     .jumbotron h1,
     .jumbotron p {
         animation: fadeIn 1.5s ease-in-out;
     }
 
-   
+    /* Estilos adicionales */
+    .container .lead {
+        font-size: 1.25rem;
+        text-align: center;
+    }
 
+    /* Espaciado y alineación */
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card + .card {
+        margin-top: 20px;
+    }
 </style>
 
 <div class="container my-5">
     <!-- Bienvenida -->
-    <div class="jumbotron text-center">
+    <div class="jumbotron">
         <h1 class="display-4">¡Bienvenidos a Taller 4!</h1>
         <p class="lead">Reserva fácilmente tu espacio deportivo y disfruta de nuestras instalaciones de primer nivel.</p>
     </div>
 
     <!-- Sección de Reservaciones -->
-    <div class="card shadow-lg">
-        <div class="card-header">
-            <h2>Reserva tu Espacio Deportivo</h2>
+    <div class="card-container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h2>Reserva tu Espacio Deportivo</h2>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    ¡Aprovecha nuestras instalaciones deportivas y reserva tu espacio en línea! Contamos con canchas de fútbol, baloncesto, tenis y más.
+                </p>
+                <a asp-page="/Reservations" class="btn btn-primary btn-lg mt-3">
+                    Ir a Reservas
+                </a>
+            </div>
+            <div class="card-footer text-muted">
+                <small>¡Disfruta de una experiencia deportiva única en Taller 4!</small>
+            </div>
         </div>
-        <div class="card-body text-center">
-            <p class="card-text">
-                ¡Aprovecha nuestras instalaciones deportivas y reserva tu espacio en línea! Contamos con canchas de fútbol, baloncesto, tenis y más.
-            </p>
-            <a asp-page="/Reservations" class="btn btn-primary btn-lg mt-3">
-                Ir a Reservas
-            </a>
-        </div>
-        <div class="card-footer text-muted">
-            <small>¡Disfruta de una experiencia deportiva única en Taller 4!</small>
-        </div>
-    </div>
 
-
-    <!-- Sección de Espacios -->
-    <div class="card shadow-lg">
-        <div class="card-header">
-            <h2>Espacios Deportivos (Listar, Crear, Eliminar)</h2>
-        </div>
-        <div class="card-body text-center">
-            <p class="card-text">
-                Texto
-            </p>
-            <a asp-page="/Spaces" class="btn btn-primary btn-lg mt-3">
-                Ir a Espacios
-            </a>
-        </div>
-        <div class="card-footer text-muted">
-            <small>¡Disfruta de una experiencia deportiva única en Taller 4!</small>
+        <!-- Sección de Espacios -->
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h2>Espacios Deportivos (Listar, Crear, Eliminar)</h2>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Administra los espacios deportivos: lista, crea y elimina los espacios según tus necesidades.
+                </p>
+                <a asp-page="/Spaces" class="btn btn-primary btn-lg mt-3">
+                    Ir a Espacios
+                </a>
+            </div>
+            <div class="card-footer text-muted">
+                <small>¡Disfruta de una experiencia deportiva única en Taller 4!</small>
+            </div>
         </div>
     </div>
 </div>

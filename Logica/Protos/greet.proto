@@ -5,6 +5,9 @@ option csharp_namespace = "Logica.Proto";
 package espacio;
 
 service SpaceService {
+
+    rpc GetZones (Empty) returns (ZonesList);
+
     // Obtener todos los espacios
     rpc GetSpaces (Empty) returns (SpaceList);
 
@@ -85,6 +88,11 @@ message SpaceId {
 message SpaceList {
     repeated Space results = 1;
 }
+
+message ZonesList {
+    repeated Zone results = 1;
+}
+
 
 message Empty {}
 

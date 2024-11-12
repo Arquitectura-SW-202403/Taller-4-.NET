@@ -61,4 +61,9 @@ public class GrpcBroker : IGrpcBroker
     {
         return await _client.BlockRangeAsync(range);
     }
+
+    public async Task<ZonesList> GetZonesList()
+    {
+        return await _client.GetZonesAsync(new Empty{});
+    }
 }

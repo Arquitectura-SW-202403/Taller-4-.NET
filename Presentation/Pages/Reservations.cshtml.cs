@@ -2,13 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
+using Presentation.Grpc;
+using Presentation.Proto;
 
 namespace MyApp.Namespace
 {
     public class ReservationsModel : PageModel
     {
+
+        private readonly ILogger<SpacesModel> _logger;
+        private readonly GrpcBroker _broker;
         // Propiedades para el modelo de la página
-        public List<Space> Spaces { get; set; }
+        public ZonesList Zones { get; set; }
+
+        public int SelectedZoneId { get; set; }
 
         [BindProperty]
         public int SelectedSpaceId { get; set; }
@@ -22,17 +29,66 @@ namespace MyApp.Namespace
         [BindProperty]
         public DateTime ReservationDate { get; set; }
 
-        // Constructor para inicializar los datos (simulado)
+        public Dictionary<long, List<Presentation.Proto.Space>> spaces;
+
+        public List<Presentation.Proto.Space> selectedSpaces {get; set;}
+
+        public List<Occupance> occupancyList {get; set;} = new List<Occupance>();
+
         public ReservationsModel()
         {
-            // Cargar datos ficticios de espacios deportivos
-            Spaces = new List<Space>
-            {
-                new Space { Id = 1, Name = "Cancha de Fútbol" },
-                new Space { Id = 2, Name = "Cancha de Tenis" },
-                new Space { Id = 3, Name = "Cancha de Baloncesto" }
-            };
+            
+            _broker = new GrpcBroker("https://localhost:7125");
+            spaces = new Dictionary<long, List<Presentation.Proto.Space>>();
+            selectedSpaces = new List<Presentation.Proto.Space>();
+            // Cargar zonas ficticias
         }
+
+        public async Task OnGet() 
+        {
+            Zones = await _broker.GetZonesList();
+            var spacesList = (await _broker.GetSpaceList()).Results;
+            foreach (var s in spacesList)
+            {
+                if (!spaces.ContainsKey(s.ZoneId)) spaces.Add(s.ZoneId, new List<Presentation.Proto.Space>());
+                spaces[s.ZoneId].Add(s);
+            }
+            if (!spaces.ContainsKey(SelectedZoneId)) spaces.Add(SelectedZoneId, new List<Presentation.Proto.Space>());
+            selectedSpaces = spaces[SelectedZoneId];
+        }
+
+        public object ChangeSelectedSpaces(long zoneId) {
+            selectedSpaces = spaces[zoneId];
+            return new {};
+        }
+
+        public async Task<string> GetOccupancy(long space_id) 
+        {
+            Console.WriteLine(SelectedSpaceId);
+            var t = (await _broker.GetOccupancyList(
+                new OccupancyQuery {
+                    SpaceId=space_id,
+                    Start=6,
+                    End=20
+                }
+            )).Result;
+
+            occupancyList = [..t];
+
+            //occupancyList = occupancyResult.Result; 
+
+            var availableTimeSlots = GetAvailableTimeSlots(occupancyList);
+
+            Console.WriteLine(availableTimeSlots.ToString());
+
+            return "";
+        }
+
+        /*
+
+        
+
+        */
 
         // Método OnPost que se llama cuando el formulario se envía
         public IActionResult OnPost()
@@ -44,11 +100,39 @@ namespace MyApp.Namespace
             }
 
             // Aquí procesarías la reserva (guardarla en base de datos, enviar confirmación, etc.)
-            // Puedes usar los valores de SelectedSpaceId, SelectedTimeSlot, CustomerName, ReservationDate
+            // Puedes usar los valores de SelectedZoneId, SelectedSpaceId, SelectedTimeSlot, CustomerName, ReservationDate
 
-            // Redirigir a una página de confirmación o mostrar mensaje
-            return RedirectToPage("Confirmation", new { name = CustomerName, spaceId = SelectedSpaceId });
+            //  Mostrar mensaje de Reserva de Confirmación
+            return RedirectToPage("Confirmation", new { name = CustomerName, zoneId = SelectedZoneId, spaceId = SelectedSpaceId });
         }
+
+        private List<TimeSlot> GetAvailableTimeSlots(List<Occupance> occupancyList)
+        {
+            var availableTimeSlots = new List<TimeSlot>();
+
+            foreach (var occ in occupancyList)
+            {
+                if (occ.Status == "available") //sI esta disponible en u horaras o franjas dispónibles, mostrar y establecer
+                {
+                    availableTimeSlots.Add(new TimeSlot 
+                    {
+                        
+                        start = occ.StartTime,
+                        end= occ.EndTime
+
+                    });
+                }
+            }
+
+            return availableTimeSlots;
+        }
+    }
+
+    // Modelo de Zona (Simulación)
+    public class Zone
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 
     // Modelo de Espacio Deportivo (Simulación)
@@ -56,5 +140,13 @@ namespace MyApp.Namespace
     {
         public int Id { get; set; }
         public string Name { get; set; }
+    }
+
+    public class TimeSlot{
+        public int Id {get; set;}
+        public int start{get;set;}
+        public int end{get;set;}
+
+
     }
 }

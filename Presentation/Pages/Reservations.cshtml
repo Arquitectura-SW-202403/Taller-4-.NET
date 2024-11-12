@@ -84,7 +84,7 @@
     <!-- Encabezado -->
     <div class="text-center mb-5">
         <h1 class="card-title">Reserva de Espacios Deportivos</h1>
-        <p class="lead">Selecciona un espacio, la fecha y la hora para tu reserva.</p>
+        <p class="lead">Selecciona la zona, el espacio, la franja horaria y confirma tu reserva.</p>
     </div>
 
     <!-- Formulario de Reserva -->
@@ -92,28 +92,62 @@
         <div class="card-body">
             <form method="post">
                 
-                
-
-                <!-- Selección de la Franja Horaria -->
+                <!-- Selección de la Zona -->
                 <div class="mb-3">
-                    <label for="timeSlot" class="form-label">Franja Horaria</label>
-                    <select class="form-select" id="timeSlot" name="SelectedTimeSlot" required>
-                        <option value="">Selecciona una franja horaria</option>
-                
+                    <label for="zone" class="form-label">Selecciona una Zona</label>
+                    <select  class="form-select" id="zone" name="SelectedZoneId"  required
+                   
+                    >
+                        <option value="">Selecciona una zona</option>
+                        @foreach (var zone in Model.Zones.Results)
+                        {
+                            <option value="@zone.Id"
+                            onselect="@Model.ChangeSelectedSpaces(@zone.Id)"
+                            >@zone.Name</option>
+                        }
                     </select>
                 </div>
 
+                <!-- Selección de Espacio Deportivo -->
+                <div class="mb-3" id="spacesSection" style="">
+                    <label for="space" class="form-label">Selecciona un Espacio</label>
+                    <select class="form-select" id="space" name="SelectedSpaceId"  
+                    onchange=""
+                    required>
+                        <option value="">Selecciona un espacio</option>
+                        @foreach (var sp in Model.selectedSpaces)
+                        {
+                            <option 
+                            value="@sp.Id"
+                            >@sp.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Selección de la Franja Horaria -->
+                <div class="mb-3" id="timeSlotSection">
+                    <label for="timeSlot" class="form-label">Franja Horaria</label>
+                    <select class="form-select" id="timeSlot" name="SelectedTimeSlot" required>
+                        <option value="">Selecciona una franja horaria</option>
+                        @if (Model.occupancyList != null && Model.occupancyList.Count > 0)
+                        {
+                            foreach (var oc in Model.occupancyList)
+                            {
+                                <option value="@oc.Id">@oc.StartTime - @oc.EndTime</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="">No hay franjas disponibles</option>
+                        }
+                    </select>
+                </div>
                 <!-- Nombre del Cliente -->
                 <div class="mb-3">
                     <label for="customerName" class="form-label">Nombre del Cliente</label>
                     <input type="text" class="form-control" id="customerName" name="CustomerName" placeholder="Ingresa tu nombre" value="@Model.CustomerName" required>
                 </div>
 
-                <!-- Selección de la Fecha -->
-                <div class="mb-3">
-                    <label for="date" class="form-label">Fecha de la Reserva</label>
-                    <input type="date" class="form-control" id="date" name="ReservationDate" value="@Model.ReservationDate.ToString("yyyy-MM-dd")" required>
-                </div>
 
                 <!-- Botón para Confirmar Reserva -->
                 <div class="text-center">
@@ -128,3 +162,29 @@
         <small>Recibirás una confirmación por correo electrónico con los detalles de tu reserva.</small>
     </div>
 </div>
+
+<script>
+    
+    // Cargar franjas horarias del espacio seleccionado
+    function loadTimeSlots(spaceId) {
+        if (spaceId === "") {
+            document.getElementById('timeSlotSection').style.display = 'none';
+            return;
+        }
+
+        // Realizar una petición AJAX para obtener las franjas horarias disponibles para el espacio seleccionado
+        fetch(`/api/timeslots/available?spaceId=${spaceId}`)
+            .then(response => response.json())
+            .then(timeSlots => {
+                let timeSlotSelect = document.getElementById('timeSlot');
+                timeSlotSelect.innerHTML = '<option value="">Selecciona una franja horaria</option>';
+                timeSlots.forEach(timeSlot => {
+                    timeSlotSelect.innerHTML += `<option value="${timeSlot.Id}">${timeSlot.Time}</option>`;
+                });
+
+                document.getElementById('timeSlotSection').style.display = 'block';
+            });
+    }
+
+    
+</script>

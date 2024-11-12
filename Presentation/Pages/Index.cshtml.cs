@@ -18,13 +18,13 @@ public class IndexModel : PageModel
 
     public async void OnGet()
     {
-        var res = await _broker.GetOccupancyList(
+        /*var res = await _broker.GetOccupancyList(
             new Proto.OccupancyQuery {
                 SpaceId=17,
                 Start=6,
                 End=20
             }
-        );
+        );*/
 
         /*var res = await _broker.BlockRange(
             new Proto.OccupancyRange {
@@ -43,6 +43,8 @@ public class IndexModel : PageModel
                 Owner="Galindo"
             }
         );*/
+
+        var res = await _broker.GetZonesList();
         Console.WriteLine(res.ToString());
     }
 }
