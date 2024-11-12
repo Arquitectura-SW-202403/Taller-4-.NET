@@ -1,7 +1,14 @@
+using Grpc.Net;
+using Presentation.Proto;
+using Presentation.Grpc;
+using Presentation.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+//builder.Services.AddSingleton<IGrpcBroker, GrpcBroker>();
 
 var app = builder.Build();
 
@@ -19,8 +26,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+app.UseStaticFiles();
+app.MapRazorPages();
 
 app.Run();

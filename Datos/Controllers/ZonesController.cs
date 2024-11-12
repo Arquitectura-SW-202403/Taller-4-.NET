@@ -25,7 +25,11 @@ namespace Datos.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Zone>>> Getzones()
         {
-            return await _context.zones.Include(x => x.Espacios).ToListAsync();
+            return new JsonResult(
+                new {
+                    results = await _context.zones.ToListAsync()
+                }
+            );
         }
 
         // GET: api/Zones/5

@@ -1,3 +1,5 @@
+using Logica.Services;
+
 public class ReservationService
 {
     private readonly HttpClientService _httpClientService;
@@ -7,22 +9,23 @@ public class ReservationService
         _httpClientService = httpClientService;
     }
 
-    public async Task<bool> CreateReservationAsync(int spaceId, string customerName, DateTime reservationTime)
-    {
-        var reservationRequest = new
+    public async Task<object> CreateReservationAsync(int spaceId, string customerName, int start, int end)
         {
-            spaceId=spaceId,
-            Owner = customerName, 
-            ReservationTime = reservationTime
-        };
+            var reservationRequest = new
+            {
+                Owner = customerName, // Cliente que realiza la reserva
+                start = start,
+                end = end
+            };
 
-        // Se realiza una solicitud POST para crear la reserva sobre el espacio
-        return await _httpClientService.PutEntityAsync<bool>($"spaces/{spaceId}/occupancy_status", reservationRequest);
-    }
+            
+            var response = await _httpClientService.PostEntityAsync<object>($"api/occupancy_status/{spaceId}",reservationRequest);
+            return response; 
+        }
 
     public async Task<bool> CancelReservationAsync(int spaceId, int reservationId)
     {
-        // Aquí se hace una solicitud DELETE para cancelar la reserva de un espacio específico
+
         return await _httpClientService.DeleteEntityAsync($"spaces/{spaceId}/occupancy_status", reservationId);
     }
 }

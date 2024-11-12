@@ -23,9 +23,13 @@ namespace Datos.Controllers
 
         // GET: api/Space
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Space>>> Getspaces()
+        public async Task<ActionResult<IEnumerable<Space>>> GetSpaces()
         {
-            return await _context.spaces.Include(x => x.Zone).Include(x => x.Occupancies).ToListAsync();
+            return new JsonResult(
+                new {
+                    results = await _context.spaces.ToListAsync()
+                }
+            );
         }
 
         // GET: api/Space/5
@@ -94,7 +98,7 @@ namespace Datos.Controllers
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSpace", new { id = space.id }, space);
+            return Ok();
         }
 
         // DELETE: api/Space/5
@@ -105,6 +109,12 @@ namespace Datos.Controllers
             if (space == null)
             {
                 return NotFound();
+            }
+
+            var occupance = await _context.occupancy_status.Where(x => x.space_id == id).ToListAsync();
+
+            foreach (var occ in occupance) {
+                _context.occupancy_status.Remove(occ); 
             }
 
             _context.spaces.Remove(space);

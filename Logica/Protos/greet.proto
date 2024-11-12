@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Logica";
+option csharp_namespace = "Logica.Proto";
 
 package espacio;
 
@@ -12,32 +12,47 @@ service SpaceService {
     rpc GetSpace (SpaceId) returns (Space);
 
     // Crear un nuevo espacio
-    rpc CreateSpace (Space) returns (Space);
+    rpc CreateSpace (FormSpace) returns (Empty);
 
     // Actualizar un espacio existente
-    rpc UpdateSpace (Space) returns (Space);
+    rpc UpdateSpace (Space) returns (Empty);
 
     // Eliminar un espacio
     rpc DeleteSpace (SpaceId) returns (Empty);
+}
 
-    // Reservar un espacio
-    rpc ReserveSpace (ReservationRequest) returns (Reservation);
-
-    // Cambiar una reserva
-    rpc ChangeReservation (ChangeReservationRequest) returns (Reservation);
-
-    // Cancelar una reserva
-    rpc CancelReservation (ReservationId) returns (Empty);
-
-    // Obtener las reservas de un espacio
-    rpc GetReservationsForSpace (SpaceId) returns (ReservationList);
+message Occupance {
+    int64 id = 1;
+    string status = 2;
+    int32 start_time = 3;
+    int32 end_time = 4;
+    string owner = 5;
+    int64 space_id = 6;
+    Space space = 7;
 }
 
 // Mensajes
 message Space {
-    int32 id = 1;
+    int64 id = 1;
     string name = 2;
-    
+    string description = 3;
+    int32 capacity = 4;
+    int64 zone_id = 5;
+    string zone = 6;
+    repeated string occupancies = 7;
+}
+
+message FormSpace {
+    string name = 1;
+    string description = 2;
+    int32 capacity = 3;
+    int64 zone_id = 4 [json_name = "zone_id"];
+}
+
+message Zone {
+    int64 id = 1;
+    string name = 2;
+    repeated Space espacios = 3;
 }
 
 message SpaceId {
@@ -45,9 +60,8 @@ message SpaceId {
 }
 
 message SpaceList {
-    repeated Space spaces = 1;
+    repeated Space results = 1;
 }
 
 message Empty {}
-
 

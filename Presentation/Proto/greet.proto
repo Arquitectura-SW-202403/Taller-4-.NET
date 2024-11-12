@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+option csharp_namespace = "Presentation.Proto";
+
+package espacio;
+
+service SpaceService {
+    // Obtener todos los espacios
+    rpc GetSpaces (Empty) returns (SpaceList);
+
+    // Obtener un espacio por ID
+    rpc GetSpace (SpaceId) returns (Space);
+
+    // Crear un nuevo espacio
+    rpc CreateSpace (FormSpace) returns (Empty);
+
+    // Actualizar un espacio existente
+    rpc UpdateSpace (Space) returns (Empty);
+
+    // Eliminar un espacio
+    rpc DeleteSpace (SpaceId) returns (Empty);
+}
+
+message Occupance {
+    int64 id = 1;
+    string status = 2;
+    int32 start_time = 3;
+    int32 end_time = 4;
+    string owner = 5;
+    int64 space_id = 6;
+    Space space = 7;
+}
+
+// Mensajes
+message Space {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 capacity = 4;
+    int64 zone_id = 5;
+    string zone = 6;
+    repeated string occupancies = 7;
+}
+
+message FormSpace {
+    string name = 1;
+    string description = 2;
+    int32 capacity = 3;
+    int64 zone_id = 4 [json_name = "zone_id"];
+}
+
+message Zone {
+    int64 id = 1;
+    string name = 2;
+    repeated Space espacios = 3;
+}
+
+message SpaceId {
+    int32 id = 1;
+}
+
+message SpaceList {
+    repeated Space results = 1;
+}
+
+message Empty {}

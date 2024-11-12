@@ -1,43 +1,64 @@
+using Entidades;
 using Grpc.Core;
-using Logica;
+using Google.Protobuf;
+using Logica.Proto;
+using Org.BouncyCastle.Crypto.Prng;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Storage;
+namespace Logica.Services;
 
-namespace Logica.Services
+public class SpaceServiceImpl : SpaceService.SpaceServiceBase
 {
-    public class SpaceService
-{
-    private readonly HttpClientService _httpClientService;
 
-    public SpaceService(HttpClient httpClient)
-    {
-        _httpClientService = new HttpClientService(httpClient, "https://localhost:7251");
+    private HttpClientService _httpClient;
+
+    public SpaceServiceImpl() {
+        _httpClient = new HttpClientService(new HttpClient(), "https://localhost:7251");
     }
 
-    public async Task<List<Space>> GetSpacesAsync()
+    public override async Task<Empty> CreateSpace(FormSpace request, ServerCallContext context)
     {
-        return await _httpClientService.GetListAsync<Space>("spaces");
+        var obj = new {
+            name = request.Name,
+            description = request.Description,
+            capacity = request.Capacity,
+            zone_id = request.ZoneId
+        };
+        await _httpClient.PostEntityAsync<object>("api/space", obj);
+        return new Empty{};
     }
 
-    public async Task<Space> GetSpaceByIdAsync(int spaceId)
+    public override async Task<Proto.Space> GetSpace(SpaceId request, ServerCallContext context)
     {
-        return await _httpClientService.GetEntityAsync<Space>("spaces", spaceId);
+        var f = (JsonElement) await _httpClient.GetEntityAsync<object>("api/space", request.Id);
+        return (Proto.Space) JsonParser.Default.Parse(f.ToString(), Proto.Space.Descriptor);
     }
 
-    public async Task<Space> CreateSpaceAsync(Space space)
+    public override async Task<Empty> UpdateSpace(Proto.Space request, ServerCallContext context)
     {
-        return await _httpClientService.PostEntityAsync("spaces",space);
+
+        var obj = new {
+            id = request.Id,
+            name = request.Name,
+            description = request.Description,
+            capacity = request.Capacity,
+            zone_id = request.ZoneId
+        };
+
+        await _httpClient.PutEntityAsync<object>("api/space", (int)request.Id, obj);
+
+        return new Empty{};
     }
 
-    //public async Task<Space> UpdateSpaceAsync(int spaceId, Space space)
-    //{
-    //    return await _httpClientService.PutEntityAsync("spaces", spaceId, space);
-    //}
-    //
-
-    public async Task<bool> DeleteSpaceAsync(int spaceId)
+    public override async Task<SpaceList> GetSpaces(Empty request, ServerCallContext context)
     {
-        return await _httpClientService.DeleteEntityAsync("spaces", spaceId);
+        var f = (JsonElement) await _httpClient.GetListAsync<object>("api/space");
+        return (SpaceList) JsonParser.Default.Parse(f.ToString(), SpaceList.Descriptor);
     }
 
-}
-
+    public override async Task<Empty> DeleteSpace(SpaceId request, ServerCallContext context)
+    {
+        await _httpClient.DeleteEntityAsync("api/space", request.Id);
+        return new Empty{};
+    }
 }

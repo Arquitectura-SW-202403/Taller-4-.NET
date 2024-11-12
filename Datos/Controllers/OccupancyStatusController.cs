@@ -26,7 +26,11 @@ namespace Datos.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OccupancyStatus>>> GetoccupancyStatus()
         {
-            return await _context.occupancy_status.ToListAsync();
+            return new JsonResult(
+                new {
+                    results = await _context.occupancy_status.ToListAsync()
+                }
+            );
         }
 
         // GET api/OccupancyStatus/spaceId?start=?&end=?
