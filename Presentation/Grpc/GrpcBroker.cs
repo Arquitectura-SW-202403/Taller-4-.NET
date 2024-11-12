@@ -46,4 +46,19 @@ public class GrpcBroker : IGrpcBroker
     {
         return await _client.DeleteSpaceAsync(id);
     }
+
+    public async Task<OccupancyList> GetOccupancyList(OccupancyQuery query)
+    {
+        return await _client.GetAllOccupanciesAsync(query);
+    }
+
+    public async Task<Empty> FreeRange(OccupancyRange range)
+    {
+        return await _client.FreeRangeAsync(range);
+    }
+
+    public async Task<Empty> BlockRange(OccupancyRange range)
+    {
+        return await _client.BlockRangeAsync(range);
+    }
 }

@@ -61,4 +61,26 @@ public class SpaceServiceImpl : SpaceService.SpaceServiceBase
         await _httpClient.DeleteEntityAsync("api/space", request.Id);
         return new Empty{};
     }
+
+    // ------------------------------------------
+
+    public override async Task<OccupancyList> GetAllOccupancies(OccupancyQuery request, ServerCallContext context)
+    {
+        Dictionary<string, string> queries = new Dictionary<string, string>();
+        queries["start"] = request.Start.ToString();
+        queries["end"] = request.End.ToString();
+        var f = (JsonElement) await _httpClient.GetEntityAsyncQuery<object>("api/OccupancyStatus",(int)request.SpaceId, queries);
+
+        return (OccupancyList) JsonParser.Default.Parse(f.ToString(), OccupancyList.Descriptor);
+    }
+
+    public override Task<Empty> BlockRange(OccupancyRange request, ServerCallContext context)
+    {
+        return base.BlockRange(request, context);
+    }
+
+    public override Task<Empty> FreeRange(OccupancyRange request, ServerCallContext context)
+    {
+        return base.FreeRange(request, context);
+    }
 }

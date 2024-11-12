@@ -18,9 +18,7 @@ public class IndexModel : PageModel
 
     public async void OnGet()
     {
-        var res = await _broker.DeleteSpace(
-            new Proto.SpaceId { Id = 16 }
-        );
+        var res = await _broker.GetSpaceList();
         Console.WriteLine(res.ToString());
     }
 }

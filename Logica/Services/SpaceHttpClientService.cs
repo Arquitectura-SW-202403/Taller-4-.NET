@@ -1,4 +1,5 @@
-
+using System.Collections;
+using System.Text.Json;
 namespace Logica.Services;
 public class HttpClientService
 {
@@ -77,5 +78,14 @@ public class HttpClientService
         return true;
     }
 
-
+    public async Task<T> GetEntityAsyncQuery<T>(string endpoint, int id, Dictionary<string, string> queries)
+    {
+        string uri = $"{endpoint}/{id}?";
+        foreach (var kvp in queries)
+        {
+            uri += $"{kvp.Key}={kvp.Value}&";
+        }
+        uri = uri.Remove(uri.Length-1);
+        return await SendRequestAsync<T>(HttpMethod.Get, uri);
+    }
 }

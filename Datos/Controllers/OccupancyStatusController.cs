@@ -45,7 +45,12 @@ namespace Datos.Controllers
                 x => x.space_id == spaceId && x.start_time >= start && x.end_time <= end
             ).ToListAsync();
 
-            return Ok(result);
+
+            var obj = new {
+                result
+            };
+
+            return Ok(obj);
         }
 
         // POST api/OccupancyStatus/block/spaceId
