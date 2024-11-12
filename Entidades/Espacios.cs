@@ -17,7 +17,6 @@ public class Space
     public float capacity { get; set; }
 
     // Clave foránea: Relación con la tabla `zones`
-
    
     public int? zone_id { get; set; }
 
