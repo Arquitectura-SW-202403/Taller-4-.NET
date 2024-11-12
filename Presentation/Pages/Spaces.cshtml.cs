@@ -35,6 +35,7 @@ namespace MyApp.Namespace
             try
             {
                 Spaces = await _broker.GetSpaceList(); // Obtener la lista de espacios
+                occupancyList = await _broker.OccupancyList();
             }
             catch (Exception ex)
             {

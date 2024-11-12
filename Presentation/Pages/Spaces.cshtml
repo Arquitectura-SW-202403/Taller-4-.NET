@@ -24,7 +24,7 @@
             <tbody>
                 @foreach (var space in Model.Spaces.Results)
                 {
-                    var occupancyStatus = Model.occupancyList?.FirstOrDefault(o => o.SpaceId == space.Id)?.Status ?? "No disponible";
+                    var occupancyStatus = Model.occupancyList?.FirstOrDefault(o => o.SpaceId == space.Id)?.Status ?? "NO TRAE EL DATO";
                     <tr>
                         <td>@space.Name</td>
                         <td>@space.Capacity</td>
