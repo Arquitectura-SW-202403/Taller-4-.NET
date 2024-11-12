@@ -1,10 +1,133 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Taller 4 - Reservas de Espacios Deportivos";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* Estilos generales */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f1f3f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1100px;
+    }
+
+    /* Jumbotron */
+    .jumbotron {
+        padding: 3rem 1rem;
+        background-color: #28a745;
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .display-4 {
+        font-weight: bold;
+        font-size: 3rem;
+    }
+
+    .lead {
+        font-size: 1.5rem;
+        font-weight: 300;
+    }
+
+    /* Tarjeta de Reservas */
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        margin-top: 30px;
+        padding: 20px;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        font-size: 1.75rem;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .card-text {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    /* Botón de Ir a Reservas */
+    .btn-primary {
+        background-color: #28a745;
+        border-color: #28a745;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        border-radius: 30px;
+    }
+
+    .btn-primary:hover {
+        background-color: #218838;
+        border-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    /* Pie de página */
+    .card-footer {
+        font-size: 0.875rem;
+        color: #6c757d;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Estilos adicionales */
+    .container .lead {
+        font-size: 1.25rem;
+        text-align: center;
+    }
+
+    /* Animación de entrada */
+    .jumbotron h1,
+    .jumbotron p {
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+   
+
+</style>
+
+<div class="container my-5">
+    <!-- Bienvenida -->
+    <div class="jumbotron text-center">
+        <h1 class="display-4">¡Bienvenidos a Taller 4!</h1>
+        <p class="lead">Reserva fácilmente tu espacio deportivo y disfruta de nuestras instalaciones de primer nivel.</p>
+    </div>
+
+    <!-- Sección de Reservaciones -->
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h2>Reserva tu Espacio Deportivo</h2>
+        </div>
+        <div class="card-body text-center">
+            <p class="card-text">
+                ¡Aprovecha nuestras instalaciones deportivas y reserva tu espacio en línea! Contamos con canchas de fútbol, baloncesto, tenis y más.
+            </p>
+            <a asp-page="/Reservations" class="btn btn-primary btn-lg mt-3">
+                Ir a Reservas
+            </a>
+        </div>
+        <div class="card-footer text-muted">
+            <small>¡Disfruta de una experiencia deportiva única en Taller 4!</small>
+        </div>
+    </div>
 </div>
