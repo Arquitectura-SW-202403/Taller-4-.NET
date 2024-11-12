@@ -21,6 +21,12 @@ namespace MyApp.Namespace
 
         
         public SpaceList Spaces { get; set; }
+
+        // Asegúrate de que occupancy_Status esté declarado aquí
+        public Occupance occupancy_Status { get; set; }
+        
+        // O asegúrate de tener una lista si estás iterando sobre varios estados
+        public List<Occupance> occupancyList { get; set; }
         
 
         // Método que carga la lista de espacios 
